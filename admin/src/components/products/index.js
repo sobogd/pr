@@ -4,9 +4,13 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { addProduct, editProduct, fetchProducts, removeProduct } from 'actions/products';
+import { addProduct, editProduct, fetchProducts, getFromAli, removeProduct } from 'actions/products';
 import AddProductForm from './add';
 import ProductsList from './list';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
+import translit from '../../services/translit';
 
 const initProductForm = {
     name: '',
@@ -24,6 +28,9 @@ const initProductForm = {
     discount: 0,
     available: 2,
     addPercent: 100,
+    seoTitle: '',
+    seoDescription: '',
+    seoKeywords: '',
 };
 
 const Products = ({
@@ -36,15 +43,40 @@ const Products = ({
     setLoading,
     products,
     categories,
+    getFromAli,
+    dataFromAli,
 }) => {
+    // стейты
+    const [isAddingOverlay, setAddingOverlay] = useState(false);
+    const [isAEditOverlay, setEditOverlay] = useState(false);
+    const [productForm, setProductForm] = useState(initProductForm);
+    const [editor, setEditor] = useState(EditorState.createEmpty());
+    // при загрузке продукта
     useEffect(() => {
         fetchProducts();
         fetchCategories();
     }, [fetchProducts, fetchCategories]);
-    useEffect(() => setLoading(loading), [loading, setLoading]);
-    const [isAddingOverlay, setAddingOverlay] = useState(false);
-    const [isAEditOverlay, setEditOverlay] = useState(false);
-    const [productForm, setProductForm] = useState(initProductForm);
+    // при обновлении
+    useEffect(() => setLoading(loading), [loading]);
+    // при загрузке чего либо с алика
+    useEffect(() => {
+        setProductForm({ ...productForm, ...dataFromAli });
+        if (dataFromAli && dataFromAli.description) {
+            const descFromAli = htmlToDraft(dataFromAli.description);
+            if (descFromAli) {
+                const contentState = ContentState.createFromBlockArray(descFromAli.contentBlocks);
+                setEditor(EditorState.createWithContent(contentState));
+            }
+        }
+    }, [dataFromAli]);
+    // при изменении в контент редакторе
+    useEffect(() => {
+        setProductForm({ ...productForm, description: draftToHtml(convertToRaw(editor.getCurrentContent())) });
+    }, [editor]);
+    useEffect(() => {
+        setProductForm({ ...productForm, link: translit(productForm.name) });
+    }, [productForm.name]);
+
     return (
         products && (
             <>
@@ -64,7 +96,7 @@ const Products = ({
                 {/** Оверлей добавления */}
                 <Modal
                     size="lg"
-                    show={isAddingOverlay}
+                    show={isAddingOverlay && !loading}
                     onHide={() => {
                         setAddingOverlay(false);
                         setProductForm(initProductForm);
@@ -78,7 +110,14 @@ const Products = ({
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <AddProductForm data={productForm} setProductForm={setProductForm} categories={categories} />
+                        <AddProductForm
+                            data={productForm}
+                            setProductForm={setProductForm}
+                            categories={categories}
+                            getFromAli={getFromAli}
+                            editorState={editor}
+                            onEditorStateChange={setEditor}
+                        />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
@@ -105,7 +144,7 @@ const Products = ({
                 {/** Оверлей редактирования */}
                 <Modal
                     size="lg"
-                    show={isAEditOverlay}
+                    show={isAEditOverlay && !loading}
                     onHide={() => {
                         setEditOverlay(false);
                         setProductForm(initProductForm);
@@ -119,7 +158,14 @@ const Products = ({
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <AddProductForm data={productForm} setProductForm={setProductForm} categories={categories} />
+                        <AddProductForm
+                            data={productForm}
+                            setProductForm={setProductForm}
+                            categories={categories}
+                            getFromAli={getFromAli}
+                            editorState={editor}
+                            onEditorStateChange={setEditor}
+                        />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
@@ -163,6 +209,7 @@ const mapStateToProps = ({ products, categories }) => ({
     products: products.products,
     loading: products.loading,
     error: products.error,
+    dataFromAli: products.dataFromAli,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -171,6 +218,7 @@ const mapDispatchToProps = (dispatch) => ({
     addProduct: (categoryForm) => dispatch(addProduct(categoryForm)),
     removeProduct: (categoryForm) => dispatch(removeProduct(categoryForm)),
     editProduct: (categoryForm) => dispatch(editProduct(categoryForm)),
+    getFromAli: (linkAli) => dispatch(getFromAli(linkAli)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

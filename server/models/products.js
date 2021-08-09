@@ -30,6 +30,9 @@ const products = new Schema({
     stars: Number, // количество звезд товара
     available: Number, // 0-3 наличие остатка
     active: Boolean, // наличие
+    seoTitle: String, // СЕО название
+    seoDescription: String, // СЕО описание
+    seoKeywords: String, // СЕО ключевые слова
 });
 
 module.exports = mongoose.model('products', products);

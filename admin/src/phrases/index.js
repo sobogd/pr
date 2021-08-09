@@ -12,6 +12,7 @@ const phrases = {
         cancel: 'Отмена',
         remove: 'Удалить',
         save: 'Сохранить',
+        download: 'Загрузить',
     },
     common: {
         parentCategory: 'Главная',
@@ -52,6 +53,13 @@ const phrases = {
             propSort: 'Сортировка',
             propName: 'Свойство',
             propValue: 'Значение',
+            linkAli: 'Ссылка в AliExpress',
+            getFromAli: 'Подгрузить данные из AliExpress',
+            priceOnSite: 'Цена на сайте: ',
+            seo: 'Мета-теги (СЕО)',
+            seoDescription: 'Мета описание',
+            seoTitle: 'Мета заголовок',
+            seoKeywords: 'Мета ключевые слова',
         },
     },
 };

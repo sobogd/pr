@@ -22,6 +22,13 @@ export const setLoading = (loading) => {
     };
 };
 
+export const loadPrductFromAli = (data) => {
+    return {
+        type: ACTION_TYPES.GET_FROM_ALI,
+        payload: data,
+    };
+};
+
 export const fetchProducts = () => {
     return async (dispatch) => {
         await dispatch(setLoading(true));
@@ -84,6 +91,25 @@ export const editProduct = (product) => {
             })
             .then(({ data }) => {
                 data === 'ok' && dispatch(fetchProducts());
+            })
+            .catch((error) => {
+                dispatch(setError(error));
+            });
+    };
+};
+
+export const getFromAli = (linkAli) => {
+    return async (dispatch) => {
+        await dispatch(setLoading(true));
+        await axios
+            .post('http://localhost:3001/products/ali', JSON.stringify({ linkAli }), {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(async ({ data }) => {
+                await dispatch(loadPrductFromAli(data));
+                await dispatch(setLoading(false));
             })
             .catch((error) => {
                 dispatch(setError(error));

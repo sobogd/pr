@@ -12,6 +12,8 @@ export default function products(state = initialState, action) {
             return { ...state, error: action.payload };
         case ACTION_TYPES.SET_LOADING:
             return { ...state, loading: action.payload };
+        case ACTION_TYPES.GET_FROM_ALI:
+            return { ...state, dataFromAli: action.payload };
 
         default:
             return state;
