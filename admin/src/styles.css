@@ -1,0 +1,47 @@
+.spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.tr-table {
+    cursor: pointer;
+}
+
+.tr-table span {
+    width: 10px;
+    height: 10px;
+    margin: 8px 6px 0 0;
+    border-radius: 20px;
+    float: left;
+}
+
+.tr-table span.success {
+    background: #198754;
+}
+
+.tr-table span.danger {
+    background: #dc3545;
+}
+
+.ml-15 {
+    margin-left: 15px;
+}

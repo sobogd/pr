@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const {ObjectId} = Schema;
 const categories = new Schema({
-    _id: ObjectId, // идентификатор
     name: String, // название
     parent: String, // родительская категория
     link: String, // ссылка
