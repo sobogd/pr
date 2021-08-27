@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles.css';
 import Categories from 'components/categories';
 import Products from 'components/products';
+import Slides from 'components/slides';
 
 function App() {
     const [loading, setLoading] = useState(false);
@@ -23,6 +24,9 @@ function App() {
                             <Link to="/products" className="nav-link">
                                 Товары
                             </Link>
+                            <Link to="/slides" className="nav-link">
+                                Слайды
+                            </Link>
                             <Link to="/setting" className="nav-link">
                                 Настройки
                             </Link>
@@ -37,6 +41,9 @@ function App() {
                     </Route>
                     <Route path="/products">
                         <Products setLoading={setLoading} />
+                    </Route>
+                    <Route path="/slides">
+                        <Slides setLoading={setLoading} />
                     </Route>
                 </Switch>
             </Container>

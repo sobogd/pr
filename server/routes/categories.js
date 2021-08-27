@@ -18,6 +18,21 @@ module.exports = (app) => {
             res.send(dbRes);
         });
     });
+    app.post('/categoriesList', async ({ body }, res) => {
+        const { parent, page, perPage, sort, order } = body;
+        const skip = perPage * page;
+        const limit = skip + perPage;
+        await connectDB(true);
+        categories.find(
+            { parent: parent || '0' },
+            '_id name link image',
+            { sort: { [sort]: order }, skip, limit },
+            function (dbErr, dbRes) {
+                connectDB(false);
+                res.send(dbRes);
+            },
+        );
+    });
     app.post('/categories/get', async ({ body }, res) => {
         await connectDB(true);
         categories.findOne({ _id: body._id }, function (dbErr, dbRes) {

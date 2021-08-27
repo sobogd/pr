@@ -6,7 +6,7 @@ module.exports = async (connect) => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,
-            useCreateIndex: true
+            useCreateIndex: true,
         });
         const db = mongoose.connection;
         await db.on('error', console.error.bind(console, 'Произошла ошибка при подключении к базе данных'));
@@ -14,4 +14,4 @@ module.exports = async (connect) => {
     } else {
         return mongoose.connection.close();
     }
-}
+};

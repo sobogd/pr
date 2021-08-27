@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import translit from 'services/translit';
 import { addCategory, editCategory, fetchCategories, removeCategory } from '../../actions/categories';
 import AddCategoryForm from './add';
 import CategoriesList from './list';
@@ -23,6 +24,9 @@ const Categories = ({ fetchCategories, addCategory, removeCategory, editCategory
     const [isAddingOverlay, setAddingOverlay] = useState(false);
     const [isAEditOverlay, setEditOverlay] = useState(false);
     const [categoryForm, setCategoryForm] = useState(initCategoryForm);
+    useEffect(() => {
+        setCategoryForm({ ...categoryForm, link: translit(categoryForm.name) });
+    }, [categoryForm.name]);
     return (
         list && (
             <>

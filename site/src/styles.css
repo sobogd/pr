@@ -1,0 +1,227 @@
+@font-face {
+    font-family: 'medieval';
+    src: local('medieval'), url(./fonts/medieval.ttf) format('truetype');
+}
+body {
+    max-width: 960px;
+    display: flex;
+    margin: 0 auto;
+    width: 100%;
+    border: 5px solid #dbe3e3;
+    min-height: 100vh;
+    flex-direction: column;
+}
+header {
+    display: flex;
+    height: 60px;
+    background: #416055;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 0 20px;
+}
+header div:last-child a {
+    margin-left: 20px;
+    position: relative;
+    float: right;
+}
+header div:first-child a {
+    margin-right: 20px;
+}
+header div:last-child a span {
+    position: absolute;
+    right: -7px;
+    top: -5px;
+    width: 15px;
+    height: 15px;
+    background: #dbe3e3bd;
+    border-radius: 15px;
+    overflow: hidden;
+    color: black;
+    font-size: 11px;
+    line-height: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+a {
+    color: inherit;
+}
+.logo {
+    font-size: 25px;
+}
+* {
+    transition: 0.2s;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+    font-weight: 300;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+.site {
+    overflow: hidden;
+    position: relative;
+    height: 100vh;
+}
+.overlay {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.473);
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 60px;
+    transform: rotateX(90deg);
+    opacity: 0;
+    box-shadow: 0 0 10px 20px rgb(255 255 255 / 47%);
+}
+
+.overlayBody {
+    top: 60px;
+    width: 80%;
+    height: 90%;
+    background: white;
+    border: 5px solid #dae3e3;
+    z-index: 1;
+}
+.overlay.open {
+    opacity: 1;
+    transform: rotateX(0deg);
+}
+
+.overlayTitle {
+    background: #416056;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 0 20px;
+    box-shadow: 0 0 0 5px #416056;
+    font-size: 22px;
+}
+.overlayBack {
+    background: rgba(255, 255, 255, 0.473);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.overlayContent {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 40px;
+}
+.overlayTitle span {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+.menu {
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+}
+.menu.open {
+    width: 100%;
+}
+.menu.open .menuContent {
+    left: 0;
+}
+.menuContent {
+    position: absolute;
+    width: 280px;
+    left: -280px;
+    background: #dae3e3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.menuContent div:first-child a {
+    float: left;
+    width: 100%;
+    padding: 10px 30px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #416056;
+}
+.menuContent div:last-child a {
+    float: left;
+    width: 100%;
+    padding: 10px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #416056;
+}
+hr {
+    float: left;
+    width: calc(100% - 50px);
+    border: 0;
+    height: 1px;
+    background: #bac7c7;
+}
+.menuIcon {
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.menuIcon span {
+    width: 25px;
+    height: 1px;
+    background: white;
+}
+.menuIcon span:nth-child(2n) {
+    width: 15px;
+}
+
+.menuIcon.open span {
+    position: absolute;
+    transform: rotate(45deg);
+}
+.menuIcon.hover span {
+    background: #bac7c7;
+}
+.menuIcon.open span:nth-child(1) {
+    transform: rotate(45deg);
+}
+.menuIcon.open span:nth-child(3) {
+    transform: rotate(-45deg);
+}
+.menuIcon.open span:nth-child(4) {
+    transform: rotate(-45deg);
+}
+
+.homeSlider {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.homeSliderContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+.homeSliderSlide {
+    float: left;
+    height: 100%;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}

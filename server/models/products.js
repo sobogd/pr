@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const { ObjectId } = Schema;
 const products = new Schema({
     link: String, // ссылка на товар
     name: String, // наименоание

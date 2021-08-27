@@ -1,4 +1,3 @@
-const connectDB = require('../services/db');
 const products = require('../models/products');
 const fs = require('fs');
 const stream = require('stream');
@@ -9,106 +8,127 @@ const got = require('got');
 const axios = require('axios');
 const pipeline = promisify(stream.pipeline);
 const { location } = require('../config');
+const connectDB = require('../services/db');
+const fileDownload = require('../services/fileDownloadAndGetLink');
+const fileRemove = require('../services/fileRemove');
 
-module.exports = (app) => {
-    app.post('/products/list', async ({ body }, res) => {
-        await connectDB(true);
-        products.find(body.parent ? { parent: body.parent } : {}, function (dbErr, dbRes) {
-            connectDB(false);
-            res.send(dbRes);
+/**
+ * Загружаем изображения, если есть, и добавляем остальные данные в БД.
+ * @param body Тело объекта, который нужно записать.
+ */
+const edit = async (body) => {
+    // проходим по ссылкам на изображения, и загружаем новые
+    let images = [];
+    for (let i = 0; i < body.images.length; i++) {
+        const downloadImage = await fileDownload(body.images[i].src, i, translit(body.name), `products/${body._id}`);
+        images.push({
+            sort: body.images[i].sort,
+            src: downloadImage,
         });
-    });
-    app.post('/products/get', async ({ body }, res) => {
-        await connectDB(true);
-        products.findOne({ _id: body._id }, function (dbErr, dbRes) {
-            connectDB(false);
-            res.send(dbRes);
-        });
-    });
-    app.post('/products/edit', async ({ body }, res) => {
-        await connectDB(true);
-        // работа с изображениями
-        const imagesPath = `images/products/${body._id}/`,
-            newImages = [];
-        for (let i = 0; i < body.images.length; i++) {
-            if (body.images[i].src.indexOf('data:') >= 0) {
-            } else if (body.images[i].src.indexOf(':3001/images/') < 0) {
-                try {
-                    const type = await fileType.fromStream(got.stream(body.images[i].src));
-                    const newSrc = `${imagesPath}${translit(body.name)}-${new Date().getTime()}.${type.ext}`;
-                    await pipeline(got.stream(body.images[i].src), fs.createWriteStream(newSrc));
-                    newImages.push({
-                        sort: body.images[i].sort,
-                        src: location + newSrc,
-                    });
-                } catch (error) {
-                    return res.send(error);
-                }
-            } else {
-                newImages.push({
-                    sort: body.images[i].sort,
-                    src: body.images[i].src,
-                });
-            }
-        }
-        // проходим по файлам в папке и удаляем те, которые не нужны
-        var productFiles = fs.readdirSync(imagesPath);
+    }
+    // проходим по файлам в папке и удаляем те, которые не нужны
+    const imagesPath = `images/products/${body._id}/`;
+    if (require('fs').existsSync(imagesPath)) {
+        const productFiles = fs.readdirSync(imagesPath);
         for (let file in productFiles) {
             let remove = true;
-            for (let image in newImages) {
-                if (newImages[image].src.indexOf(productFiles[file]) >= 0) {
+            for (let image in images) {
+                if (images[image].src.indexOf(productFiles[file]) >= 0) {
                     remove = false;
                     break;
                 }
             }
             if (remove) fs.unlinkSync(`${imagesPath}${productFiles[file]}`);
         }
-        // сохраняем изменения в БД
-        products.findOneAndUpdate(
-            { _id: body._id },
-            {
-                ...body,
-                images: newImages,
-            },
-            () => {
-                connectDB(false);
-                res.send('ok');
-            },
-        );
+    }
+    // сохраняем изменения в БД
+    const updateResult = await products.findOneAndUpdate({ _id: body._id }, { ...body, images });
+    return updateResult;
+};
+
+/**
+ * Методы для работы со товарами.
+ * @param app Приложение Express.
+ */
+module.exports = (app) => {
+    /**
+     * Получить список всех товаров.
+     */
+    app.post('/products/list', async ({ body }, res) => {
+        await connectDB(true);
+        try {
+            const { category, page, perPage, sort } = body;
+            const skip = perPage * page;
+            const limit = skip + perPage;
+            const allProducts = await products.find({});
+            console.log('find', allProducts);
+            return res.send(allProducts);
+        } catch (error) {
+            console.log('error', error);
+            return res.send(error);
+        } finally {
+            await connectDB(false);
+        }
     });
+    /**
+     * Получить товар по ID.
+     */
+    // app.post('/products/get', async ({ body }, res) => {
+    //     await connectDB(true);
+    //     products.findOne({ _id: body._id }, function (dbErr, dbRes) {
+    //         connectDB(false);
+    //         res.send(dbRes);
+    //     });
+    // });
+    /**
+     * Удалить товар по ID вместе с файлами.
+     */
     app.post('/products/remove', async ({ body }, res) => {
         await connectDB(true);
-        products.remove({ _id: body._id }, function (dbErr) {
-            fs.rmdirSync(`images/products/${body._id}`, { recursive: true });
-            connectDB(false);
-            res.send('ok');
-        });
+        try {
+            const removeResult = await products.remove({ _id: body._id });
+            await require('fs').rmdirSync(`images/products/${body._id}`, { recursive: true });
+            console.log('remove', removeResult);
+            return res.send('ok');
+        } catch (error) {
+            console.log('error', error);
+            return res.send(error);
+        } finally {
+            await connectDB(false);
+        }
     });
+    /**
+     * Редактировать товар по ID.
+     */
+    app.post('/products/edit', async ({ body }, res) => {
+        await connectDB(true);
+        try {
+            const editResult = await edit(body);
+            console.log('findOneAndUpdate', editResult);
+            return res.send('ok');
+        } catch (error) {
+            console.log('error', error);
+            return res.send(error);
+        } finally {
+            await connectDB(false);
+        }
+    });
+    /**
+     * Добавить товар и по ID обновить его данными.
+     */
     app.post('/products/add', async ({ body }, res) => {
         await connectDB(true);
-        products.create({}, async (_, dbRes) => {
-            fs.mkdirSync(`images/products/${dbRes._id}`);
-            await axios
-                .post(
-                    'http://localhost:3001/products/edit',
-                    JSON.stringify({
-                        ...body,
-                        _id: dbRes._id,
-                    }),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    },
-                )
-                .then(() => {
-                    connectDB(false);
-                    res.send('ok');
-                })
-                .catch((error) => {
-                    res.send(error);
-                });
-        });
+        try {
+            const createResult = await products.create({});
+            const resultEdit = await edit({ ...body, _id: createResult._id });
+            console.log(resultEdit);
+            return res.send('ok');
+        } catch (error) {
+            console.log('error', error);
+            return res.send(error);
+        } finally {
+            await connectDB(false);
+        }
     });
     app.post('/products/ali', async ({ body }, res) => {
         const productId = body.linkAli.split('.html')[0].split('/').pop();
