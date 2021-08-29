@@ -1,17 +1,10 @@
 const products = require("../models/products");
 const fs = require("fs");
 const rimraf = require("rimraf");
-const stream = require("stream");
-const { promisify } = require("util");
 const translit = require("../services/translit");
-const fileType = require("file-type");
-const got = require("got");
 const axios = require("axios");
-const pipeline = promisify(stream.pipeline);
-const { location } = require("../config");
 const connectDB = require("../services/db");
 const fileDownload = require("../services/fileDownloadAndGetLink");
-const fileRemove = require("../services/fileRemove");
 
 /**
  * Загружаем изображения, если есть, и добавляем остальные данные в БД.
