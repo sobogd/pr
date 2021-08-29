@@ -95,7 +95,7 @@ module.exports = (app) => {
     await connectDB(true);
     try {
       const removeResult = await products.remove({ _id: body._id });
-      await require("fs").rmdirSync(`images/products/${body._id}`, {
+      require("fs").rmdirSync(`/images/products/${body._id}`, {
         recursive: true,
       });
       console.log("remove", removeResult);
