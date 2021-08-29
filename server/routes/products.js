@@ -130,6 +130,7 @@ module.exports = (app) => {
     await connectDB(true);
     try {
       const createResult = await products.create({});
+      await require("fs").mkdirSync(`images/products/${createResult._id}`);
       const resultEdit = await edit({ ...body, _id: createResult._id });
       console.log(resultEdit);
       return res.send("ok");
