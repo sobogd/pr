@@ -141,7 +141,10 @@ module.exports = (app) => {
     }
   });
   app.post("/api/products/ali", async ({ body }, res) => {
-    const productId = body.linkAli.split(".html")[0].split("/").pop();
+    const productId =
+      body.linkAli.indexOf("/share.htm") < 0
+        ? body.linkAli.split(".html")[0].split("/").pop()
+        : body.linkAli.split(".html%3")[0].split("%2Fitem%2F").pop();
     const url = `https://m.aliexpress.com/fn/fc-detail-msite/index?productId=${productId}&pageName=detail-msite`;
     try {
       await axios
