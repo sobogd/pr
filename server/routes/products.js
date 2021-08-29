@@ -1,5 +1,6 @@
 const products = require("../models/products");
 const fs = require("fs");
+const rimraf = require("rimraf");
 const stream = require("stream");
 const { promisify } = require("util");
 const translit = require("../services/translit");
@@ -95,9 +96,7 @@ module.exports = (app) => {
     await connectDB(true);
     try {
       const removeResult = await products.remove({ _id: body._id });
-      require("fs").rmdirSync(`/images/products/${body._id}`, {
-        recursive: true,
-      });
+      rimraf.sync(`images/products/${body._id}`);
       console.log("remove", removeResult);
       return res.send("ok");
     } catch (error) {
