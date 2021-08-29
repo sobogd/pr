@@ -1,6 +1,7 @@
 const connectDB = require("../services/db");
 const categories = require("../models/categories");
 const fileDownload = require("../services/fileDownloadAndGetLink");
+const fileRemove = require("../services/fileRemove");
 
 /**
  * Загружаем изображения, если есть, и добавляем остальные данные в БД.
