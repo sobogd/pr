@@ -33,7 +33,7 @@ export const fetchProducts = () => {
   return async (dispatch) => {
     await dispatch(setLoading(true));
     await axios
-      .post("http://localhost:3001/products/list")
+      .post("/api/products/list")
       .then(({ data }) => {
         dispatch(setProducts(data));
       })
