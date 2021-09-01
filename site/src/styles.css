@@ -1,227 +1,386 @@
 @font-face {
-    font-family: 'medieval';
-    src: local('medieval'), url(./fonts/medieval.ttf) format('truetype');
+  font-family: "medieval";
+  src: local("medieval"), url(./fonts/medieval.ttf) format("truetype");
 }
 body {
-    max-width: 960px;
-    display: flex;
-    margin: 0 auto;
-    width: 100%;
-    border: 5px solid #dbe3e3;
-    min-height: 100vh;
-    flex-direction: column;
+  max-width: 960px;
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  border: 5px solid #dbe3e3;
+  min-height: 100vh;
+  flex-direction: column;
 }
 header {
-    display: flex;
-    height: 60px;
-    background: #416055;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    padding: 0 20px;
+  display: flex;
+  height: 75px;
+  background: #416055;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  padding: 0 20px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
 }
 header div:last-child a {
-    margin-left: 20px;
-    position: relative;
-    float: right;
+  margin-left: 20px;
+  position: relative;
+  float: right;
 }
 header div:first-child a {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 header div:last-child a span {
-    position: absolute;
-    right: -7px;
-    top: -5px;
-    width: 15px;
-    height: 15px;
-    background: #dbe3e3bd;
-    border-radius: 15px;
-    overflow: hidden;
-    color: black;
-    font-size: 11px;
-    line-height: 15px;
-    text-align: center;
-    font-weight: 600;
+  position: absolute;
+  right: -7px;
+  top: -5px;
+  width: 15px;
+  height: 15px;
+  background: #dbe3e3bd;
+  border-radius: 15px;
+  overflow: hidden;
+  color: black;
+  font-size: 11px;
+  line-height: 15px;
+  text-align: center;
+  font-weight: 600;
+}
+.menuBack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background: rgb(0 0 0 / 26%);
+  opacity: 0;
+}
+
+.open .menuBack {
+  opacity: 1;
 }
 a {
-    color: inherit;
+  color: inherit;
 }
 .logo {
-    font-size: 25px;
+  font-size: 25px;
 }
 * {
-    transition: 0.2s;
-    box-sizing: border-box;
-    font-family: 'Merriweather', serif;
-    font-weight: 300;
-    text-decoration: none;
-    letter-spacing: -0.5px;
+  transition: 0.2s;
+  box-sizing: border-box;
+  font-family: "Merriweather", serif;
+  font-weight: 300;
+  text-decoration: none;
+  letter-spacing: -0.5px;
 }
 .site {
-    overflow: hidden;
-    position: relative;
-    height: 100vh;
+  overflow: hidden;
+  position: relative;
+  height: 100vh;
+}
+
+.content {
+  height: calc(100vh - 75px);
+  margin-top: 75px;
+  overflow-y: scroll;
 }
 .overlay {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.473);
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 60px;
-    transform: rotateX(90deg);
-    opacity: 0;
-    box-shadow: 0 0 10px 20px rgb(255 255 255 / 47%);
+  position: absolute;
+  background: rgba(255, 255, 255, 0.473);
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+  transform: rotateX(90deg);
+  opacity: 0;
+  box-shadow: 0 0 10px 20px rgb(255 255 255 / 47%);
 }
 
 .overlayBody {
-    top: 60px;
-    width: 80%;
-    height: 90%;
-    background: white;
-    border: 5px solid #dae3e3;
-    z-index: 1;
+  top: 75px;
+  width: 80%;
+  height: 90%;
+  background: white;
+  border: 5px solid #dae3e3;
+  z-index: 1;
 }
 .overlay.open {
-    opacity: 1;
-    transform: rotateX(0deg);
+  opacity: 1;
+  transform: rotateX(0deg);
 }
 
 .overlayTitle {
-    background: #416056;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    padding: 0 20px;
-    box-shadow: 0 0 0 5px #416056;
-    font-size: 22px;
+  background: #416056;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 0 20px;
+  box-shadow: 0 0 0 5px #416056;
+  font-size: 22px;
 }
 .overlayBack {
-    background: rgba(255, 255, 255, 0.473);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
+  background: rgba(255, 255, 255, 0.473);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 .overlayContent {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 40px;
 }
 .overlayTitle span {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
 }
 .menu {
-    position: absolute;
-    top: 60px;
-    bottom: 0;
-    left: 0;
-    width: 0%;
+  position: absolute;
+  top: 75px;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  z-index: 2;
+  transition: none;
 }
 .menu.open {
-    width: 100%;
+  width: 100%;
 }
 .menu.open .menuContent {
-    left: 0;
+  left: 0;
 }
 .menuContent {
-    position: absolute;
-    width: 280px;
-    left: -280px;
-    background: #dae3e3;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+  position: absolute;
+  width: 280px;
+  left: -280px;
+  background: #dae3e3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  z-index: 3;
 }
 .menuContent div:first-child a {
-    float: left;
-    width: 100%;
-    padding: 10px 30px;
-    font-size: 20px;
-    font-weight: 600;
-    color: #416056;
+  float: left;
+  width: 100%;
+  padding: 10px 30px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #416056;
 }
 .menuContent div:last-child a {
-    float: left;
-    width: 100%;
-    padding: 10px 30px;
-    font-size: 15px;
-    font-weight: 600;
-    color: #416056;
+  float: left;
+  width: 100%;
+  padding: 10px 30px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #416056;
 }
 hr {
-    float: left;
-    width: calc(100% - 50px);
-    border: 0;
-    height: 1px;
-    background: #bac7c7;
+  float: left;
+  width: calc(100% - 50px);
+  border: 0;
+  height: 1px;
+  background: #bac7c7;
 }
 .menuIcon {
-    width: 25px;
-    height: 25px;
-    float: left;
-    position: relative;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
+  width: 25px;
+  height: 25px;
+  float: left;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
 }
 
 .menuIcon span {
-    width: 25px;
-    height: 1px;
-    background: white;
+  width: 25px;
+  height: 1px;
+  background: white;
 }
 .menuIcon span:nth-child(2n) {
-    width: 15px;
+  width: 15px;
 }
 
 .menuIcon.open span {
-    position: absolute;
-    transform: rotate(45deg);
+  position: absolute;
+  transform: rotate(45deg);
 }
 .menuIcon.hover span {
-    background: #bac7c7;
+  background: #bac7c7;
 }
 .menuIcon.open span:nth-child(1) {
-    transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 .menuIcon.open span:nth-child(3) {
-    transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 .menuIcon.open span:nth-child(4) {
-    transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .homeSlider {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-}
-
-.homeSliderContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-}
-
-.homeSliderSlide {
-    float: left;
-    height: 100%;
+  margin-bottom: 25px;
 }
 
 img {
-    max-width: 100%;
-    max-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.homeslider-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.homeslider-block {
+  background-color: rgb(255 255 255 / 84%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 50%;
+  margin-left: -15%;
+}
+
+.homeslider-block span {
+  font-size: 30px;
+  font-weight: 600;
+  color: #416056;
+}
+
+.homeslider-block a {
+  border: 1px solid #416056;
+  padding: 10px 25px;
+  color: #416056;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.homeslider-block a:hover {
+  border-color: #376e5c;
+  color: #376e5c;
+}
+
+.homeslider-block p {
+  margin: 15px 0 30px;
+  line-height: 27px;
+}
+
+.homeslider .swiper-slide img {
+  width: 50%;
+  float: left;
+}
+.homeslider .swiper-slide {
+  position: relative;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #416056 !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #416056 !important;
+}
+.topproducts-header {
+  height: 400px;
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topproducts-header img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: table;
+  width: 100%;
+  height: auto;
+  max-height: 150%;
+  bottom: 0;
+  margin: auto;
+  z-index: -1;
+}
+
+.topproducts-header span {
+  font-size: 30px;
+  font-weight: 600;
+  color: #416056;
+  background: rgb(255 255 255 / 54%);
+  padding: 15px 30px;
+  margin-top: -10%;
+}
+.topproducts .swiper-container {
+  margin: -120px auto 0;
+  padding-bottom: 40px;
+  width: 860px;
+}
+
+.product-card {
+  border: 10px solid white;
+  width: 270px;
+  display: flex;
+  flex-direction: column;
+}
+
+a.product-card-image {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  float: left;
+  overflow: hidden;
+  background: white;
+}
+.topproducts {
+  margin-bottom: 50px;
+}
+
+.topproducts .swiper-pagination {
+  bottom: 0;
+}
+a.product-card-name {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  padding: 15px 20px 10px;
+}
+
+span.product-card-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: #416056;
+  text-align: center;
+}
+a.product-card-image img {
+  height: 100%;
+  width: auto;
+  max-width: inherit;
+}
+.topproducts .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
 }

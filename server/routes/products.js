@@ -73,6 +73,27 @@ module.exports = (app) => {
     }
   });
   /**
+   * Получить список ТОП товаров
+   */
+  app.post("/api/products/top", async ({ body }, res) => {
+    await connectDB(true);
+    try {
+      const { category, page, perPage, sort } = body;
+      const allProducts = await products.find(
+        { top: true },
+        "_id name link images price",
+        { sort: { [sort]: 1 } }
+      );
+      console.log("find", allProducts);
+      return res.send(allProducts);
+    } catch (error) {
+      console.log("error", error);
+      return res.send(error);
+    } finally {
+      await connectDB(false);
+    }
+  });
+  /**
    * Получить товар по ID.
    */
   // app.post('/products/get', async ({ body }, res) => {

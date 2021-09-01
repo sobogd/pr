@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
+    "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "11.2.7",
     "@testing-library/user-event": "12.8.3",
@@ -35,6 +36,10 @@
     "redux": "4.1.1",
     "redux-logger": "3.0.6",
     "redux-thunk": "2.3.0",
+    "sass": "^1.38.2",
+    "scss": "^0.2.4",
+    "swiper": "^6.8.4",
+    "watch": "^1.0.2",
     "web-vitals": "1.1.2",
     "ws": "^8.0.0"
   },
@@ -42,13 +47,8 @@
     "start": "PORT=3003 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "eject": "react-scripts eject",
+    "watch": "watch 'npm run build' ./src"
   },
   "browserslist": {
     "production": [
@@ -64,5 +64,8 @@
   },
   "devDependencies": {
     "eslint-plugin-react": "7.24.0"
-  }
+  },
+  "tags": [
+    "swiper"
+  ]
 }

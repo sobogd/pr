@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
-import HomeSlider from './homeslider';
+import React from "react";
+import FullSlider from "../fullSlider";
+import TopProducts from "../topProducts";
 
-const HomePage = ({ slides, fetchSlides }) => {
-    useEffect(() => fetchSlides(), []);
-    console.log(slides);
-    return <div>{slides.list.length > 0 && <HomeSlider slides={slides.list} />}</div>;
+const HomePage = () => {
+  return (
+    <>
+      <FullSlider />
+      <TopProducts />
+    </>
+  );
 };
 
 export default HomePage;
